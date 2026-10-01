@@ -3,6 +3,8 @@
 Pick which of your monitors Remote Desktop uses, by **which screen it is**, not by a number
 that changes every time you plug something in.
 
+![Picking a preset, unticking a screen and choosing the main screen](docs/demo.gif)
+
 ## The problem
 
 Windows Remote Desktop (`mstsc`) can span a subset of your monitors via the
