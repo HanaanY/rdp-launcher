@@ -1,0 +1,6 @@
+# personal config - contains your server address and monitor serial numbers
+template.rdp
+presets.json
+
+*.log
+*.lnk
