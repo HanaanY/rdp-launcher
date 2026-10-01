@@ -323,7 +323,7 @@ function Fill-Monitors {
 function Get-Checked { @($lst.CheckedIndices | ForEach-Object { $monitors[$_] }) }
 
 function Fill-Main($preferKey) {
-    $sel = Get-Checked
+    $sel = @(Get-Checked)
     $cboMain.Items.Clear()
     foreach ($m in $sel) { [void]$cboMain.Items.Add($m.Label) }
     if (-not $sel.Count) { return }
@@ -375,7 +375,7 @@ function Apply-Preset {
 
 function Get-OrderedSelection {
     # main screen first, then the rest in mstsc order
-    $sel = Get-Checked
+    $sel = @(Get-Checked)
     if (-not $sel.Count) { return @() }
     $main = $sel[[math]::Max(0, $cboMain.SelectedIndex)]
     @($main) + @($sel | Where-Object { $_.Key -ne $main.Key })
@@ -389,7 +389,7 @@ $lst.add_ItemCheck({
 })
 
 $btnSave.add_Click({
-    $sel = Get-OrderedSelection
+    $sel = @(Get-OrderedSelection)
     if (-not $sel.Count) { $lblWarn.Text = 'Tick at least one monitor first.'; return }
     $default = ($sel | ForEach-Object { $_.Name }) -join ' + '
     $name = [Microsoft.VisualBasic.Interaction]::InputBox('Preset name:', 'Save preset', $default)
@@ -446,7 +446,7 @@ $btnConnect.add_Click({
         $lblWarn.Text = 'Monitors just changed - check the ticks and click Connect again.'
         return
     }
-    $sel = Get-OrderedSelection
+    $sel = @(Get-OrderedSelection)
     if (-not $sel.Count) { $lblWarn.Text = 'Tick at least one monitor.'; return }
     Start-Rdp ([int[]]($sel | ForEach-Object { $_.Id }))
     $form.Close()
