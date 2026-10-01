@@ -27,16 +27,19 @@ Built-in options: **All monitors** and **Laptop screen only**.
 1. In Remote Desktop, set up your connection the way you like it (address, redirected
    drives, etc.), then **Show Options → Save As** and save it as `template.rdp` in this folder.
    Its monitor settings don't matter; the launcher sets those.
-2. Create a Desktop shortcut:
+2. Run `new-shortcut.ps1` from this folder. It's a helper script that puts a
+   **Remote Desktop (pick monitors)** shortcut on your Desktop. The shortcut runs
+   `rdp-launcher.ps1` with the console window hidden and uses the Remote Desktop icon.
 
    ```powershell
    powershell -ExecutionPolicy Bypass -File .\new-shortcut.ps1
    ```
 
-3. Open it, tick the screens you want, **Save as preset…**, then **Connect**.
+3. Double-click the new Desktop shortcut, tick the screens you want, **Save as preset…**,
+   then **Connect**.
 
-For a one-click shortcut that connects straight away with a preset (it falls back to the
-picker if one of the preset's monitors isn't connected):
+Optionally, give a preset its own one-click Desktop shortcut. It connects straight away,
+and opens the picker instead if one of the preset's monitors isn't connected:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\new-shortcut.ps1 -Preset "Home desk"
