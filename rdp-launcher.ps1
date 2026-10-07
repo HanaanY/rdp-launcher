@@ -133,6 +133,7 @@ function Get-PhysicalMonitors {
 
         $result += [pscustomobject]@{
             Key = "$code|$serial"; Name = $name; Code = $code; Internal = $internal
+            Index = $a   # position in the full output list, inactive outputs included
             X = $dm.dmPositionX; Y = $dm.dmPositionY; Width = $dm.dmPelsWidth; Height = $dm.dmPelsHeight
             Primary = ($ad.StateFlags -band 4) -ne 0
         }
@@ -159,10 +160,10 @@ function Get-Monitors {
         # Fallback: ask mstsc itself (pops up the `mstsc /l` dialog briefly).
         $mstsc = @(Get-MstscMonitors)
     } else {
-        # mstsc numbers monitors in Windows' display order (verified with test-mstsc-order.ps1,
-        # including dock replugs that reshuffle the order), so predict the IDs directly.
-        $i = 0
-        $mstsc = @($phys | ForEach-Object { [pscustomobject]@{ Id = $i++; X = $_.X; Y = $_.Y; Width = $_.Width; Height = $_.Height } })
+        # mstsc's ID is the output's position in EnumDisplayDevices' full list, counting
+        # inactive outputs too. A wireless (Miracast) TV listed after four unused GPU outputs
+        # is ID 5, not 1. Verified with test-mstsc-order.ps1, including dock replugs.
+        $mstsc = @($phys | ForEach-Object { [pscustomobject]@{ Id = $_.Index; X = $_.X; Y = $_.Y; Width = $_.Width; Height = $_.Height } })
     }
     $primary = $phys | Where-Object Primary | Select-Object -First 1
     foreach ($m in $mstsc) {

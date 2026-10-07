@@ -58,8 +58,10 @@ powershell -ExecutionPolicy Bypass -File .\new-shortcut.ps1 -Preset "Home desk"
 
 ## How the IDs are worked out
 
-Microsoft doesn't document how `mstsc` numbers monitors. Empirically it numbers them in
-Windows' own display order (`EnumDisplayDevices`), and the launcher relies on that, so it's
+Microsoft doesn't document how `mstsc` numbers monitors. Empirically, a monitor's ID is its
+position in Windows' full list of display outputs (`EnumDisplayDevices`), **including
+inactive ones**. On a laptop where the GPU has a few unused outputs, a wireless (Miracast) TV
+can be ID 5 even when it's the only other screen. The launcher relies on this rule, so it's
 instant and doesn't need to open the `mstsc /l` dialog.
 
 `test-mstsc-order.ps1` checks this on your machine: leave it running, plug and unplug
